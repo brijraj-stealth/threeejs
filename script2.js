@@ -6,10 +6,17 @@ import { TextureLoader } from 'three';
 // Scene Setup
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 200);
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const canvas = document.getElementById('threeCanvas');  // Target the canvas element
+const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvas });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
-document.body.appendChild(renderer.domElement);
+
+// Resize event listener
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
 
 // Controls
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -67,7 +74,6 @@ logoTextureLoader.load('path/to/your/logo_image.jpg', (logoTexture) => {
     djBooth.geometry = djBoothGeometry;
     djBooth.material = djBoothMaterials;
 });
-
 
 // Modern Nightclub Floor Colors
 const modernPlateColors = [
